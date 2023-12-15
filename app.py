@@ -48,7 +48,7 @@ def upload_to_openai(filepath):
 # Create a sidebar for API key configuration and additional features
 #st.sidebar.header("Configuration")
 #api_key = st.sidebar.text_input("Enter your OpenAI API key", type="password")
-openai.api_key = "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"
+openai.api_key = "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"
 #if api_key:
 #    openai.api_key = api_key
 
