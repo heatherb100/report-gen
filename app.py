@@ -8,6 +8,7 @@ import time
 
 # Set your OpenAI Assistant ID here
 assistant_id = 'asst_NCAmBSQbrt7JkyKJN5UUy77Y'
+api_key = st.secrets["OPENAI_API_KEY"]
 
 # Initialize the OpenAI client (ensure to set your API key in the sidebar within the app)
 client = openai
@@ -45,39 +46,45 @@ def upload_to_openai(filepath):
         response = openai.files.create(file=file.read(), purpose="assistants")
     return response.id
 
-# Create a sidebar for API key configuration and additional features
-#st.sidebar.header("Configuration")
-#api_key = st.sidebar.text_input("Enter your OpenAI API key", type="password")
-openai.api_key = "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"
-#if api_key:
-#    openai.api_key = api_key
+
+
+
+
 
 # Additional features in the sidebar for web scraping and file uploading
-st.sidebar.header("Report Genie 🧞")
-st.sidebar.write("Please provide the CSV file that you would like our bot to analyze for a report. Once uploaded, click on 'Start Chat' to ask any questions related to the data.")
+#st.sidebar.header("Report Genie 🧞")
+#st.sidebar.write("Upload your CSV file, then chat with the bot for insights and analysis.")
 #website_url = st.sidebar.text_input("Enter a website URL to scrape and organize into a PDF", key="website_url")
 
-# Button to scrape a website, convert to PDF, and upload to OpenAI
-#if st.sidebar.button("Scrape and Upload"):
-    # Scrape, convert, and upload process
-#    scraped_text = scrape_website(website_url)
-#    pdf_path = text_to_pdf(scraped_text, "scraped_content.pdf")
-#   file_id = upload_to_openai(pdf_path)
-#    st.session_state.file_id_list.append(file_id)
-    #st.sidebar.write(f"File ID: {file_id}")
 
 # Sidebar option for users to upload their own files
 uploaded_file = st.sidebar.file_uploader("Upload a CSV file", key="file_uploader")
 
 # Button to upload a user's file and store the file ID
-if st.sidebar.button("Upload File"):
+#if st.sidebar.button("Upload File"):
     # Upload file provided by user
-    if uploaded_file:
-        with open(f"{uploaded_file.name}", "wb") as f:
-            f.write(uploaded_file.getbuffer())
-        additional_file_id = upload_to_openai(f"{uploaded_file.name}")
-        st.session_state.file_id_list.append(additional_file_id)
-        st.sidebar.write(f"Additional File ID: {additional_file_id}")
+ #   if uploaded_file:
+  #      with open(f"{uploaded_file.name}", "wb") as f:
+   #         f.write(uploaded_file.getbuffer())
+    #    additional_file_id = upload_to_openai(f"{uploaded_file.name}")
+     #   st.session_state.file_id_list.append(additional_file_id)
+      #  st.sidebar.write(f"Additional File ID: {additional_file_id}")"""
+
+# Automatic upload and chat start when a file is selected
+if uploaded_file:
+    with open(f"{uploaded_file.name}", "wb") as f:
+        f.write(uploaded_file.getbuffer())
+    additional_file_id = upload_to_openai(f"{uploaded_file.name}")
+    st.session_state.file_id_list.append(additional_file_id)
+   # st.sidebar.write(f"Additional File ID: {additional_file_id}")
+
+    # Start the chat session automatically if it hasn't started yet
+    if not st.session_state.start_chat:
+        st.session_state.start_chat = True
+        # Create a thread once and store its ID in session state
+        thread = client.beta.threads.create()
+        st.session_state.thread_id = thread.id
+       # st.write("thread id: ", thread.id)
 
 # Display all file IDs
 if st.session_state.file_id_list:
@@ -132,7 +139,7 @@ def process_message_with_citations(message):
 
 # Main chat interface setup
 st.title("Report Genie 🧞")
-#st.write("Unveiling Data Insights: From CSV to Compelling Narratives")
+st.write("Unlock the power of conversation with your data! Report Genie turns complex data into actionable insights through an engaging chat experience. Explore trends, discover patterns, and make informed decisions with ease.")
 
 # Only show the chat interface if the chat has been started
 if st.session_state.start_chat:
@@ -148,7 +155,7 @@ if st.session_state.start_chat:
             st.markdown(message["content"])
 
     # Chat input for the user
-    if prompt := st.chat_input("What is up?"):
+    if prompt := st.chat_input("Ask me anything.."):
         # Add user message to the state and display it
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
