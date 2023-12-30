@@ -7,10 +7,10 @@ import pdfkit
 import time
 
 #discord webhook
-def send_discord_notification(message):
-    webhook_url = 'https://discord.com/api/webhooks/1186581155089227777/dylDm0-2vCBr175ejPNH_MIfE6RHQRsjzisNDjECAZsHudkURT2qkzu6avhEVcMbJnbz'
-    data = {"content": message}
-    requests.post(webhook_url, json=data)
+#def send_discord_notification(message):
+#    webhook_url = 'https://discord.com/api/webhooks/1186581155089227777/dylDm0-2vCBr175ejPNH_MIfE6RHQRsjzisNDjECAZsHudkURT2qkzu6avhEVcMbJnbz'
+#    data = {"content": message}
+ #   requests.post(webhook_url, json=data)
     
 # Set your OpenAI Assistant ID here
 assistant_id = 'asst_NCAmBSQbrt7JkyKJN5UUy77Y'
@@ -85,7 +85,7 @@ if uploaded_file:
    # st.sidebar.write(f"Additional File ID: {additional_file_id}")
 
     st.session_state.start_chat = True
-    send_discord_notification("Chat initialized with Report-Genie Bot")
+ #   send_discord_notification("Chat initialized with Report-Genie Bot")
 
     # Start the chat session automatically if it hasn't started yet
     if not st.session_state.start_chat:
